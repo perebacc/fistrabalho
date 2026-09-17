@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trabalho, Energia e Potência | Sistemas Conservativos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.9.0/distrib/jsxgraph.css">
+<script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.9.0/distrib/jsxgraphcore.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  chtml: { scale: 1.0 },
+  startup: {
+    ready: () => {
+      MathJax.startup.defaultReady();
+    }
+  }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" id="MathJax-script" async></script>
+
+<style>
+:root{
+  --plum-900:#3b0764;
+  --plum-700:#6b21a8;
+  --plum-600:#7e22ce;
+  --rose-600:#e11d48;
+  --rose-500:#f43f5e;
+  --rose-400:#fb7185;
+  --lilac-300:#c4b5fd;
+  --lilac-200:#ddd6fe;
+  --lilac-100:#ede9fe;
+  --bg-1:#fdf2f8;
+  --bg-2:#f5f3ff;
+  --ink:#2e1065;
+  --ink-soft:#5b21b6;
+  --paper:#ffffff;
+  --paper-soft:#fbf7ff;
+  --line:#e9d5ff;
+  --good:#16a34a;
+  --bad:#dc2626;
+  --radius:18px;
+  --shadow:0 8px 30px rgba(107,33,168,0.12);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #ffe4f0 0%, transparent 60%),
+    radial-gradient(1000px 500px at 110% 10%, #ede9fe 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2) 40%, #fdf4ff 100%);
+  background-attachment:fixed;
+  line-height:1.6;
+  padding-bottom:60px;
+}
+
+h1,h2,h3,h4{
+  font-family:'Sora',system-ui,sans-serif;
+  color:var(--plum-900);
+  margin:0 0 .5em 0;
+  line-height:1.25;
+}
+
+a{color:var(--rose-600);}
+
+.wrap{max-width:960px; margin:0 auto; padding:0 20px;}
+
+/* ---------- HERO ---------- */
+header.hero{
+  padding:56px 20px 40px;
+  text-align:center;
+  position:relative;
+}
+.eyebrow{
+  display:inline-block;
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:.75rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--plum-700);
+  background:var(--lilac-100);
+  border:1px solid var(--lilac-300);
+  padding:6px 16px;
+  border-radius:999px;
+  margin-bottom:18px;
+}
+header.hero h1{
+  font-size:clamp(1.7rem, 4.2vw, 2.7rem);
+  max-width:820px;
+  margin-left:auto;
+  margin-right:auto;
+}
+header.hero h1 span{
+  background:linear-gradient(90deg, var(--rose-500), var(--plum-700));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+header.hero p.lead{
+  max-width:640px;
+  margin:0 auto;
+  color:var(--ink-soft);
+  font-size:1.02rem;
+}
+
+/* incidence pills */
+.incidence-row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+  margin-top:26px;
+}
+.pill{
+  background:var(--paper);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  border-radius:14px;
+  padding:10px 16px;
+  font-size:.85rem;
+  font-weight:600;
+  color:var(--plum-700);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.pill b{color:var(--rose-600); font-family:'Sora',sans-serif;}
+
+/* ---------- NAV ---------- */
+nav.toc{
+  max-width:960px;
+  margin:0 auto 36px;
+  padding:0 20px;
+}
+nav.toc ul{
+  list-style:none;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+  gap:10px;
+  margin:0; padding:0;
+}
+nav.toc a{
+  display:block;
+  text-decoration:none;
+  background:var(--paper);
+  border:1px solid var(--line);
+  color:var(--plum-700);
+  font-weight:600;
+  font-size:.88rem;
+  padding:12px 14px;
+  border-radius:12px;
+  text-align:center;
+  transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+}
+nav.toc a:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+  background:var(--lilac-100);
+}
+
+/* ---------- CALLOUT: cai / não cai ---------- */
+.callout{
+  max-width:960px;
+  margin:0 auto 40px;
+  padding:0 20px;
+}
+.callout-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:22px;
+}
+@media(max-width:640px){ .callout-grid{grid-template-columns:1fr;} }
+.callout-col h3{
+  font-size:1rem;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:12px;
+}
+.callout-col.foca h3{color:var(--rose-600);}
+.callout-col.evita h3{color:#9333ea;}
+.callout-col ul{margin:0; padding-left:20px;}
+.callout-col li{margin-bottom:6px; font-size:.94rem;}
+.badge-dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.foca .badge-dot{background:var(--rose-500);}
+.evita .badge-dot{background:var(--lilac-300);}
+
+/* ---------- SECTION TITLES ---------- */
+section.block{
+  max-width:960px;
+  margin:0 auto 30px;
+  padding:0 20px;
+}
+.section-tag{
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:.78rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--rose-600);
+  margin-bottom:6px;
+  display:block;
+}
+h2.section-title{font-size:clamp(1.3rem,2.6vw,1.7rem);}
+
+/* ---------- ACCORDION ---------- */
+details.acc{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:16px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+details.acc[open]{border-color:var(--rose-400);}
+details.acc summary{
+  list-style:none;
+  cursor:pointer;
+  padding:18px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  color:var(--plum-900);
+  font-size:1.02rem;
+  gap:12px;
+}
+details.acc summary::-webkit-details-marker{display:none;}
+summary .num{
+  color:var(--rose-500);
+  font-family:'Sora',sans-serif;
+  margin-right:10px;
+  font-size:.85em;
+}
+summary .chev{
+  flex:0 0 auto;
+  width:26px;height:26px;
+  border-radius:50%;
+  background:var(--lilac-100);
+  display:flex; align-items:center; justify-content:center;
+  transition:transform .25s ease, background .25s ease;
+  color:var(--plum-700);
+  font-weight:700;
+}
+details.acc[open] summary .chev{
+  transform:rotate(45deg);
+  background:var(--rose-500);
+  color:#fff;
+}
+.acc-body{
+  padding:2px 24px 22px;
+  border-top:1px solid var(--line);
+}
+.acc-body h4{
+  font-size:1rem;
+  color:var(--plum-700);
+  margin-top:20px;
+}
+.acc-body p{margin:8px 0; font-size:.97rem;}
+.acc-body ul, .acc-body ol{padding-left:22px; font-size:.97rem;}
+.acc-body li{margin-bottom:6px;}
+
+.formula-box{
+  background:var(--paper-soft);
+  border:1px dashed var(--lilac-300);
+  border-radius:12px;
+  padding:14px 18px;
+  margin:14px 0;
+  text-align:center;
+  font-size:1.05rem;
+  overflow-x:auto;
+}
+.formula-box .caption{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;
+  color:var(--ink-soft);
+  margin-top:6px;
+  font-weight:600;
+}
+
+.note{
+  background:linear-gradient(135deg, var(--lilac-100), #fff);
+  border-left:4px solid var(--rose-500);
+  border-radius:10px;
+  padding:12px 16px;
+  font-size:.92rem;
+  margin:14px 0;
+}
+.note b{color:var(--rose-600);}
+
+.skip-note{
+  background:#faf5ff;
+  border-left:4px solid var(--lilac-300);
+  border-radius:10px;
+  padding:12px 16px;
+  font-size:.88rem;
+  color:#7c3aed;
+  margin:14px 0;
+}
+
+table.mini{
+  width:100%;
+  border-collapse:collapse;
+  font-size:.9rem;
+  margin:14px 0;
+}
+table.mini th, table.mini td{
+  border:1px solid var(--line);
+  padding:8px 10px;
+  text-align:center;
+}
+table.mini th{
+  background:var(--lilac-100);
+  color:var(--plum-700);
+  font-family:'Sora',sans-serif;
+  font-size:.82rem;
+}
+
+svg.diagram{
+  width:100%;
+  height:auto;
+  display:block;
+  margin:16px auto;
+  max-width:520px;
+}
+
+/* ---------- FLASHCARDS ---------- */
+.flash-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(190px, 1fr));
+  gap:16px;
+}
+.flash-card{
+  perspective:1200px;
+  height:150px;
+  cursor:pointer;
+}
+.flash-inner{
+  position:relative;
+  width:100%; height:100%;
+  transition:transform .55s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+}
+.flash-card.flipped .flash-inner{transform:rotateY(180deg);}
+.flash-face{
+  position:absolute; inset:0;
+  border-radius:14px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:14px;
+  backface-visibility:hidden;
+  box-shadow:var(--shadow);
+}
+.flash-front{
+  background:linear-gradient(160deg, var(--paper), var(--lilac-100));
+  border:1px solid var(--line);
+  color:var(--plum-800, var(--plum-900));
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:.95rem;
+}
+.flash-front small{
+  display:block;
+  font-family:'Inter',sans-serif;
+  font-weight:500;
+  color:var(--ink-soft);
+  font-size:.72rem;
+  margin-top:8px;
+}
+.flash-back{
+  background:linear-gradient(160deg, var(--rose-500), var(--plum-700));
+  color:#fff;
+  transform:rotateY(180deg);
+  font-size:1.05rem;
+}
+.flash-hint{
+  text-align:center;
+  font-size:.82rem;
+  color:var(--ink-soft);
+  margin-bottom:16px;
+}
+
+/* ---------- QUIZ ---------- */
+.quiz-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  padding:22px;
+  margin-bottom:16px;
+}
+.quiz-progress{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+  font-family:'Sora',sans-serif;
+  font-size:.85rem;
+  color:var(--plum-700);
+  font-weight:700;
+}
+.score-tag{
+  background:var(--lilac-100);
+  padding:4px 12px;
+  border-radius:999px;
+}
+.q-text{
+  font-weight:600;
+  margin-bottom:14px;
+  font-size:1rem;
+}
+.opt-list{list-style:none; padding:0; margin:0;}
+.opt-list li{margin-bottom:9px;}
+.opt-btn{
+  width:100%;
+  text-align:left;
+  background:var(--paper-soft);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px 14px;
+  font-family:'Inter',sans-serif;
+  font-size:.92rem;
+  cursor:pointer;
+  transition:background .15s ease, border-color .15s ease;
+}
+.opt-btn:hover{background:var(--lilac-100);}
+.opt-btn.correct{background:#dcfce7; border-color:var(--good); color:#14532d; font-weight:600;}
+.opt-btn.wrong{background:#fee2e2; border-color:var(--bad); color:#7f1d1d; font-weight:600;}
+.opt-btn:disabled{cursor:default;}
+.feedback{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:.9rem;
+  display:none;
+}
+.feedback.show{display:block;}
+.feedback.ok{background:#dcfce7; color:#14532d;}
+.feedback.no{background:#fee2e2; color:#7f1d1d;}
+.quiz-actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:14px;
+}
+.btn{
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:.85rem;
+  background:linear-gradient(90deg, var(--rose-500), var(--plum-700));
+  color:#fff;
+  border:none;
+  padding:10px 22px;
+  border-radius:999px;
+  cursor:pointer;
+  box-shadow:0 6px 18px rgba(225,29,72,0.25);
+}
+.btn:hover{filter:brightness(1.05);}
+.btn.secondary{
+  background:var(--paper);
+  color:var(--plum-700);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+.quiz-result{
+  text-align:center;
+  padding:30px 20px;
+}
+.quiz-result .big-score{
+  font-family:'Sora',sans-serif;
+  font-size:2.4rem;
+  font-weight:800;
+  background:linear-gradient(90deg, var(--rose-500), var(--plum-700));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+/* ---------- FORMULA SUMMARY ---------- */
+.formula-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  gap:14px;
+}
+.formula-card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:16px;
+  box-shadow:var(--shadow);
+}
+.formula-card h4{
+  margin:0 0 8px;
+  font-size:.85rem;
+  color:var(--rose-600);
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+.formula-card .eq{font-size:1.15rem; text-align:center; margin:8px 0;}
+.formula-card p{font-size:.82rem; color:var(--ink-soft); margin:0;}
+
+footer{
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:.82rem;
+  margin-top:50px;
+  padding:0 20px;
+}
+
+@media(max-width:480px){
+  details.acc summary{padding:15px 16px; font-size:.94rem;}
+  .acc-body{padding:2px 16px 18px;}
+  section.block{padding:0 14px;}
+  .callout-grid{padding:16px;}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <span class="eyebrow">Física · 3º ano · Mecânica</span>
+  <h1>Trabalho, Energia e <span>Potência</span> — Sistemas Conservativos e Não Conservativos</h1>
+  <p class="lead">Trabalho, energia cinética, energia potencial, potência e a diferença entre sistemas conservativos e não conservativos.</p>
+</header>
+
+<nav class="toc">
+  <ul>
+    <li><a href="#trabalho">1. Trabalho</a></li>
+    <li><a href="#potencia">2. Potência</a></li>
+    <li><a href="#cinetica">3. Energia Cinética</a></li>
+    <li><a href="#potencial">4. Energia Potencial</a></li>
+    <li><a href="#conservativo">5. Sist. Conservativos</a></li>
+    <li><a href="#naoconservativo">6. Sist. Não Conservativos</a></li>
+    <li><a href="#flashcards">Flashcards</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- ===================== 1. TRABALHO ===================== -->
+<section class="block" id="trabalho">
+  <span class="section-tag">01</span>
+  <h2 class="section-title">Trabalho</h2>
+
+  <details class="acc" open>
+    <summary><span><span class="num">1.1</span>O que é trabalho e como calcular</span><span class="chev">+</span></summary>
+    <div class="acc-body">
+      <p>Trabalho (\(W\)) é a medida de energia transferida por uma força quando ela atua ao longo de um deslocamento. Só existe trabalho se houver deslocamento — força aplicada sobre um corpo parado não realiza trabalho.</p>
+
+      <div class="formula-box">
+        \[ W = F \cdot d \cdot \cos\theta \]
+        <span class="caption">F = intensidade da força (N) · d = deslocamento (m) · θ = ângulo entre força e deslocamento</span>
+      </div>
+
+      <div id="board-force" class="diagram" style="width:100%; max-width:480px; height:260px; margin:16px auto;"></div>
+
+      <h4>Casos particulares (muito cobrados)</h4>
+      <table class="mini">
+        <tr><th>Situação</th><th>Ângulo θ</th><th>Trabalho</th></tr>
+        <tr><td>Força a favor do movimento</td><td>0°</td><td>\(W = F\,d\) (máximo, positivo)</td></tr>
+        <tr><td>Força perpendicular ao deslocamento</td><td>90°</td><td>\(W = 0\)</td></tr>
+        <tr><td>Força contrária ao movimento</td><td>180°</td><td>\(W = -F\,d\) (negativo)</td></tr>
+      </table>
+
+      <div class="note"><b>Pegadinha clássica:</b> força centrípeta, normal e peso em movimento horizontal têm trabalho nulo porque são perpendiculares ao deslocamento.</div>
+
+      <h4>Trabalho da força peso</h4>
+      <p>Não depende da trajetória — só da variação de altura entre o ponto inicial e final:</p>
+      <div class="formula-box">
+        \[ W_{peso} = \pm\, m\,g\,h \]
+        <span class="caption">positivo quando o corpo desce, negativo quando sobe</span>
+      </div>
+
+      <h4>Trabalho da força elástica</h4>
+      <div class="formula-box">
+        \[ W_{el} = -\left(\dfrac{k\,x_f^2}{2} - \dfrac{k\,x_i^2}{2}\right) \]
+        <span class="caption">energia é armazenada na deformação da mola</span>
+      </div>
+
+      <h4>Trabalho de força variável (gráfico F × d)</h4>
+      <p>Quando a força não é constante, o trabalho é numericamente igual à <b>área sob a curva</b> no gráfico Força × deslocamento — não precisa de integral, basta calcular a área da figura geométrica formada.</p>
+
+      <div style="max-width:480px; margin:16px auto;"><canvas id="chart-fd" height="220"></canvas></div>
+    </div>
+  </details>
+</section>
+
+<!-- ===================== 2. POTÊNCIA ===================== -->
+<section class="block" id="potencia">
+  <span class="section-tag">02</span>
+  <h2 class="section-title">Potência</h2>
+
+  <details class="acc">
+    <summary><span><span class="num">2.1</span>Potência média, instantânea e rendimento</span><span class="chev">+</span></summary>
+    <div class="acc-body">
+      <p>Potência mede a <b>rapidez</b> com que uma energia (ou trabalho) é transferida.</p>
+
+      <h4>Potência média</h4>
+      <div class="formula-box">
+        \[ P_{med} = \dfrac{W}{\Delta t} \]
+        <span class="caption">unidade no SI: watt (W) = J/s</span>
+      </div>
+
+      <h4>Potência instantânea</h4>
+      <div class="formula-box">
+        \[ P = F \cdot v \cdot \cos\theta \]
+        <span class="caption">usada quando a velocidade é constante ou se quer a potência em um instante</span>
+      </div>
+
+      <h4>Unidades usuais em prova</h4>
+      <table class="mini">
+        <tr><th>Unidade</th><th>Equivalência</th></tr>
+        <tr><td>1 kW</td><td>1000 W</td></tr>
+        <tr><td>1 CV</td><td>≈ 735 W</td></tr>
+        <tr><td>1 HP</td><td>≈ 746 W</td></tr>
+      </table>
+
+      <h4>Rendimento (eficiência)</h4>
+      <div class="formula-box">
+        \[ \eta = \dfrac{P_{\text{útil}}}{P_{\text{total}}}\times 100\% \]
+        <span class="caption">sempre \(\eta < 100\%\) em máquinas reais — parte da energia é dissipada</span>
+      </div>
+      <div class="note">Questões costumam colocar isso em contextos do dia a dia: motores, chuveiros elétricos, elevadores, o corpo humano subindo escadas.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ===================== 3. ENERGIA CINÉTICA ===================== -->
+<section class="block" id="cinetica">
+  <span class="section-tag">03</span>
+  <h2 class="section-title">Energia Cinética e Teorema da Energia Cinética</h2>
+
+  <details class="acc">
+    <summary><span><span class="num">3.1</span>Energia associada ao movimento</span><span class="chev">+</span></summary>
+    <div class="acc-body">
+      <div class="formula-box">
+        \[ E_c = \dfrac{m\,v^2}{2} \]
+        <span class="caption">m = massa (kg) · v = velocidade (m/s) · resultado em joules</span>
+      </div>
+
+      <h4>Teorema da energia cinética (Teorema Trabalho-Energia)</h4>
+      <p>O trabalho realizado pela <b>força resultante</b> sobre um corpo é igual à variação de sua energia cinética. É uma das ideias mais cobradas do tópico inteiro:</p>
+      <div class="formula-box">
+        \[ W_{res} = \Delta E_c = E_{c,f} - E_{c,i} \]
+      </div>
+      <div class="note">Serve tanto para forças constantes quanto variáveis — é o "atalho" que evita ter que calcular trajetória, aceleração, tempo etc.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ===================== 4. ENERGIA POTENCIAL ===================== -->
+<section class="block" id="potencial">
+  <span class="section-tag">04</span>
+  <h2 class="section-title">Energia Potencial</h2>
+
+  <details class="acc">
+    <summary><span><span class="num">4.1</span>Gravitacional e elástica</span><span class="chev">+</span></summary>
+    <div class="acc-body">
+      <p>Energia potencial é a energia "armazenada" pela posição ou configuração de um sistema — ela pode ser convertida em outras formas de energia.</p>
+
+      <h4>Energia potencial gravitacional</h4>
+      <div class="formula-box">
+        \[ E_{pg} = m\,g\,h \]
+        <span class="caption">h é medido a partir de um referencial (nível zero) escolhido no problema</span>
+      </div>
+      <div class="note"><b>Atenção:</b> o valor de \(E_{pg}\) depende do referencial escolhido, mas a <b>variação</b> de energia não depende.</div>
+
+      <h4>Energia potencial elástica</h4>
+      <div class="formula-box">
+        \[ E_{pe} = \dfrac{k\,x^2}{2} \]
+        <span class="caption">k = constante elástica da mola (N/m) · x = deformação em relação ao repouso</span>
+      </div>
+    </div>
+  </details>
+</section>
+
+<!-- ===================== 5. SISTEMAS CONSERVATIVOS ===================== -->
+<section class="block" id="conservativo">
+  <span class="section-tag">05</span>
+  <h2 class="section-title">Sistemas Conservativos</h2>
+
+  <details class="acc">
+    <summary><span><span class="num">5.1</span>Forças conservativas e conservação da energia mecânica</span><span class="chev">+</span></summary>
+    <div class="acc-body">
+      <p>Uma força é <b>conservativa</b> quando o trabalho que ela realiza não depende do caminho percorrido — depende apenas das posições inicial e final. Consequência importante: o trabalho de uma força conservativa em uma trajetória fechada é sempre zero.</p>
+
+      <table class="mini">
+        <tr><th>Forças conservativas</th><th>O que geram</th></tr>
+        <tr><td>Peso (gravitacional)</td><td>Energia potencial gravitacional</td></tr>
+        <tr><td>Força elástica</td><td>Energia potencial elástica</td></tr>
+        <tr><td>Força elétrica</td><td>Energia potencial elétrica</td></tr>
+      </table>
+
+      <h4>Energia mecânica</h4>
+      <div class="formula-box">
+        \[ E_m = E_c + E_p \]
+      </div>
+
+      <h4>Conservação da energia mecânica</h4>
+      <p>Quando <b>apenas forças conservativas</b> realizam trabalho sobre o sistema, a energia mecânica se mantém constante ao longo de todo o movimento:</p>
+      <div class="formula-box">
+        \[ E_{m,\,inicial} = E_{m,\,final} \]
+        \[ E_{c,i} + E_{p,i} = E_{c,f} + E_{p,f} \]
+      </div>
+
+      <div style="max-width:480px; margin:16px auto;"><canvas id="chart-energy" height="240"></canvas></div>
+
+      <div class="note">Exemplos clássicos de prova: queda livre, pêndulo simples, bloco-mola, montanha-russa sem atrito, lançamento vertical/oblíquo desprezando o ar.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ===================== 6. SISTEMAS NÃO CONSERVATIVOS ===================== -->
+<section class="block" id="naoconservativo">
+  <span class="section-tag">06</span>
+  <h2 class="section-title">Sistemas Não Conservativos</h2>
+
+  <details class="acc">
+    <summary><span><span class="num">6.1</span>Forças dissipativas e perda de energia mecânica</span><span class="chev">+</span></summary>
+    <div class="acc-body">
+      <p>Forças <b>dissipativas</b> (também chamadas de não conservativas) transformam energia mecânica em outras formas de energia — principalmente calor. O trabalho delas <b>depende da trajetória percorrida</b>.</p>
+
+      <table class="mini">
+        <tr><th>Forças dissipativas</th><th>Para onde vai a energia</th></tr>
+        <tr><td>Atrito</td><td>Energia térmica (calor)</td></tr>
+        <tr><td>Resistência do ar / arrasto</td><td>Energia térmica + sonora</td></tr>
+      </table>
+
+      <h4>Trabalho da força de atrito</h4>
+      <p>É sempre <b>negativo</b>, pois se opõe ao movimento:</p>
+      <div class="formula-box">
+        \[ W_{atrito} = \Delta E_m = E_{m,f} - E_{m,i} \;\; (< 0) \]
+        <span class="caption">a energia mecânica final é sempre menor que a inicial</span>
+      </div>
+
+      <div id="board-incline" class="diagram" style="width:100%; max-width:480px; height:280px; margin:16px auto;"></div>
+
+      <h4>Lei geral da conservação de energia</h4>
+      <p>Mesmo quando a energia mecânica <i>não</i> se conserva, a <b>energia total</b> do universo (mecânica + térmica + outras formas) sempre se conserva — nada se cria ou se destrói, só se transforma.</p>
+      <div class="formula-box">
+        \[ E_{m,i} = E_{m,f} + E_{dissipada} \]
+      </div>
+      <div class="note">É assim que aparece em provas de montanha-russa, freios de carro, planos inclinados com atrito, quedas com resistência do ar.</div>
+    </div>
+  </details>
+</section>
+
+<!-- ===================== FLASHCARDS ===================== -->
+<section class="block" id="flashcards">
+  <span class="section-tag">Revisão rápida</span>
+  <h2 class="section-title">Flashcards de Fórmulas</h2>
+  <p class="flash-hint">Toque no card para ver a fórmula.</p>
+  <div class="flash-grid" id="flashGrid"></div>
+</section>
+
+<!-- ===================== QUIZ ===================== -->
+<section class="block" id="quiz">
+  <span class="section-tag">Teste-se</span>
+  <h2 class="section-title">Quiz — Trabalho, Energia e Potência</h2>
+  <div class="quiz-card" id="quizCard"></div>
+</section>
+
+<!-- ===================== FORMULA SUMMARY ===================== -->
+<section class="block">
+  <span class="section-tag">Resumo</span>
+  <h2 class="section-title">Todas as fórmulas, num só lugar</h2>
+  <div class="formula-grid">
+    <div class="formula-card"><h4>Trabalho</h4><div class="eq">\(W = F\,d\,\cos\theta\)</div><p>Força constante</p></div>
+    <div class="formula-card"><h4>Trabalho do peso</h4><div class="eq">\(W_{peso} = \pm mgh\)</div><p>Independe do caminho</p></div>
+    <div class="formula-card"><h4>Energia cinética</h4><div class="eq">\(E_c = \dfrac{mv^2}{2}\)</div><p>Associada ao movimento</p></div>
+    <div class="formula-card"><h4>Teorema da E.C.</h4><div class="eq">\(W_{res} = \Delta E_c\)</div><p>Trabalho da resultante</p></div>
+    <div class="formula-card"><h4>E. potencial gravitacional</h4><div class="eq">\(E_{pg} = mgh\)</div><p>Depende do referencial</p></div>
+    <div class="formula-card"><h4>E. potencial elástica</h4><div class="eq">\(E_{pe} = \dfrac{kx^2}{2}\)</div><p>Energia da mola</p></div>
+    <div class="formula-card"><h4>Energia mecânica</h4><div class="eq">\(E_m = E_c + E_p\)</div><p>Soma cinética + potencial</p></div>
+    <div class="formula-card"><h4>Conservação (sist. conservativo)</h4><div class="eq">\(E_{m,i}=E_{m,f}\)</div><p>Só forças conservativas</p></div>
+    <div class="formula-card"><h4>Sist. não conservativo</h4><div class="eq">\(W_{atrito}=\Delta E_m\)</div><p>Sempre negativo</p></div>
+    <div class="formula-card"><h4>Potência média</h4><div class="eq">\(P = \dfrac{W}{\Delta t}\)</div><p>Rapidez de transferência</p></div>
+    <div class="formula-card"><h4>Potência instantânea</h4><div class="eq">\(P = Fv\cos\theta\)</div><p>Num instante</p></div>
+    <div class="formula-card"><h4>Rendimento</h4><div class="eq">\(\eta = \dfrac{P_{\text{útil}}}{P_{\text{total}}}\)</div><p>Sempre menor que 100%</p></div>
+  </div>
+</section>
+
+<footer>Guia de estudo — foco em vestibular e Enem · revise, faça o quiz, repita.</footer>
+
+<script>
+/* ---------------- DIAGRAMA: força × deslocamento (JSXGraph) ---------------- */
+const boardForce = JXG.JSXGraph.initBoard('board-force', {
+  boundingbox: [-1, 5.5, 9, -1],
+  axis: false,
+  showCopyright: false,
+  showNavigation: false,
+  pan: {enabled:false},
+  zoom: {enabled:false}
+});
+boardForce.create('point', [0,0], {name:'', size:2, fixed:true, color:'#e11d48'});
+boardForce.create('arrow', [[0,0],[7.5,0]], {strokeColor:'#c4b5fd', strokeWidth:4, fixed:true});
+boardForce.create('text', [6.6,-0.55,'deslocamento (d)'], {fontSize:15, color:'#5b21b6', cssStyle:'font-family:Inter;font-weight:600;'});
+boardForce.create('arrow', [[0,0],[5,3.4]], {strokeColor:'#f43f5e', strokeWidth:5, fixed:true});
+boardForce.create('text', [5.15,3.55,'F'], {fontSize:18, color:'#e11d48', cssStyle:'font-family:Sora;font-weight:700;'});
+boardForce.create('angle', [[7.5,0],[0,0],[5,3.4]], {radius:1.4, fillColor:'#ede9fe', fillOpacity:0.6, strokeColor:'#7e22ce', name:'θ', withLabel:true, label:{fontSize:16, color:'#7e22ce', cssStyle:'font-family:Inter;font-style:italic;'}});
+
+/* ---------------- DIAGRAMA: plano inclinado com atrito (JSXGraph) ---------------- */
+const boardIncline = JXG.JSXGraph.initBoard('board-incline', {
+  boundingbox: [-1, 6, 9, -1],
+  axis: false,
+  showCopyright: false,
+  showNavigation: false,
+  pan: {enabled:false},
+  zoom: {enabled:false}
+});
+boardIncline.create('segment', [[0,0],[8,5]], {strokeColor:'#c4b5fd', strokeWidth:5, fixed:true});
+boardIncline.create('segment', [[0,0],[8,0]], {strokeColor:'#ddd6fe', strokeWidth:2, dash:2, fixed:true});
+boardIncline.create('point', [4.5,2.8], {name:'', size:5, face:'square', color:'#f43f5e', fixed:true});
+boardIncline.create('arrow', [[4.5,2.8],[2.3,1.44]], {strokeColor:'#7e22ce', strokeWidth:4, fixed:true});
+boardIncline.create('text', [1.6,1.55,'movimento'], {fontSize:14, color:'#7e22ce', cssStyle:'font-family:Inter;font-weight:600;'});
+boardIncline.create('arrow', [[4.5,2.8],[5.9,3.66]], {strokeColor:'#dc2626', strokeWidth:4, fixed:true});
+boardIncline.create('text', [6.0,4.0,'atrito'], {fontSize:14, color:'#dc2626', cssStyle:'font-family:Inter;font-weight:600;'});
+boardIncline.create('arrow', [[4.5,2.8],[4.5,0.8]], {strokeColor:'#5b21b6', strokeWidth:3, dash:1, fixed:true});
+boardIncline.create('text', [4.6,1.4,'peso'], {fontSize:13, color:'#5b21b6', cssStyle:'font-family:Inter;'});
+
+/* ---------------- GRÁFICO: força × deslocamento (Chart.js) ---------------- */
+new Chart(document.getElementById('chart-fd'), {
+  type: 'line',
+  data: {
+    labels: [0,1,2,3,4,5],
+    datasets: [{
+      label: 'F (N)',
+      data: [0,10,20,30,40,50],
+      borderColor: '#f43f5e',
+      backgroundColor: 'rgba(196,181,253,0.45)',
+      fill: true,
+      tension: 0,
+      pointBackgroundColor: '#e11d48',
+      borderWidth: 3
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {display:false},
+      title: {display:true, text:'Trabalho = área sob a curva F × d', font:{family:'Sora', size:13, weight:'700'}, color:'#6b21a8'}
+    },
+    scales: {
+      x: {title:{display:true, text:'d (m)', color:'#5b21b6'}, grid:{color:'#ede9fe'}},
+      y: {title:{display:true, text:'F (N)', color:'#5b21b6'}, grid:{color:'#ede9fe'}}
+    }
+  }
+});
+
+/* ---------------- GRÁFICO: conservação de energia mecânica (Chart.js) ---------------- */
+new Chart(document.getElementById('chart-energy'), {
+  type: 'bar',
+  data: {
+    labels: ['Ponto alto', 'Ponto médio', 'Ponto baixo'],
+    datasets: [
+      {label:'Energia cinética (Ec)', data:[0,50,100], backgroundColor:'#f43f5e'},
+      {label:'Energia potencial (Ep)', data:[100,50,0], backgroundColor:'#c4b5fd'}
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {position:'bottom', labels:{font:{family:'Inter'}}},
+      title: {display:true, text:'Em = Ec + Ep = constante (sistema conservativo)', font:{family:'Sora', size:13, weight:'700'}, color:'#6b21a8'}
+    },
+    scales: {
+      x: {stacked:true, grid:{display:false}},
+      y: {stacked:true, title:{display:true, text:'Energia (J)', color:'#5b21b6'}, grid:{color:'#ede9fe'}}
+    }
+  }
+});
+
+/* ---------------- FLASHCARDS ---------------- */
+const cards = [
+  {front:"Trabalho de força constante", back:"\\(W = F\\,d\\,\\cos\\theta\\)"},
+  {front:"Energia cinética", back:"\\(E_c = \\dfrac{mv^2}{2}\\)"},
+  {front:"Teorema da energia cinética", back:"\\(W_{res} = \\Delta E_c\\)"},
+  {front:"Energia potencial gravitacional", back:"\\(E_{pg} = mgh\\)"},
+  {front:"Energia potencial elástica", back:"\\(E_{pe} = \\dfrac{kx^2}{2}\\)"},
+  {front:"Energia mecânica", back:"\\(E_m = E_c + E_p\\)"},
+  {front:"Potência média", back:"\\(P = \\dfrac{W}{\\Delta t}\\)"},
+  {front:"Potência instantânea", back:"\\(P = F\\,v\\,\\cos\\theta\\)"},
+  {front:"Rendimento", back:"\\(\\eta = \\dfrac{P_{útil}}{P_{total}}\\)"},
+  {front:"Sistema não conservativo (atrito)", back:"\\(W_{atrito} = \\Delta E_m\\)"}
+];
+
+const flashGrid = document.getElementById('flashGrid');
+cards.forEach((c) => {
+  const div = document.createElement('div');
+  div.className = 'flash-card';
+  div.innerHTML = `
+    <div class="flash-inner">
+      <div class="flash-face flash-front">${c.front}<small>toque para revelar</small></div>
+      <div class="flash-face flash-back">${c.back}</div>
+    </div>`;
+  div.addEventListener('click', () => {
+    div.classList.toggle('flipped');
+    if (window.MathJax) MathJax.typesetPromise([div]);
+  });
+  flashGrid.appendChild(div);
+});
+
+/* ---------------- QUIZ ---------------- */
+const quizData = [
+  {
+    q: "Uma força de 10 N forma ângulo de 60° com o deslocamento de 5 m de um bloco. Qual o trabalho realizado por essa força? (cos 60° = 0,5)",
+    options: ["50 J", "25 J", "43,3 J", "5 J"],
+    correct: 1,
+    explain: "W = F·d·cosθ = 10 × 5 × 0,5 = 25 J."
+  },
+  {
+    q: "Uma força perpendicular ao deslocamento de um corpo realiza trabalho de:",
+    options: ["Trabalho máximo positivo", "Trabalho negativo", "Zero", "Depende da massa"],
+    correct: 2,
+    explain: "Como cos 90° = 0, o trabalho é sempre nulo quando a força é perpendicular ao deslocamento."
+  },
+  {
+    q: "Um corpo cai em queda livre, desprezando a resistência do ar. O que acontece com a energia mecânica durante a queda?",
+    options: ["Aumenta continuamente", "Diminui continuamente", "Permanece constante", "Vira zero no meio do percurso"],
+    correct: 2,
+    explain: "Sem forças dissipativas, apenas o peso (força conservativa) atua, então a energia mecânica se conserva: a Ep vira Ec, mas a soma não muda."
+  },
+  {
+    q: "Um bloco desce uma rampa com atrito. Comparando a energia mecânica no topo e na base, é correto afirmar que:",
+    options: ["Em(topo) = Em(base)", "Em(topo) < Em(base)", "Em(topo) > Em(base)", "Não é possível comparar"],
+    correct: 2,
+    explain: "O atrito é uma força dissipativa: parte da energia mecânica vira calor, então a energia mecânica final é menor que a inicial."
+  },
+  {
+    q: "Um motor realiza 300 J de trabalho em 5 segundos. Qual é a potência média desse motor?",
+    options: ["1500 W", "60 W", "305 W", "6 W"],
+    correct: 1,
+    explain: "P = W/Δt = 300/5 = 60 W."
+  },
+  {
+    q: "O teorema da energia cinética relaciona o trabalho da força resultante com:",
+    options: ["A variação da energia potencial", "A variação da energia cinética", "A potência instantânea", "O rendimento do sistema"],
+    correct: 1,
+    explain: "W_resultante = ΔEc — essa é a definição do teorema do trabalho-energia cinética."
+  },
+  {
+    q: "Qual das forças abaixo é classificada como NÃO conservativa (dissipativa)?",
+    options: ["Força peso", "Força elástica", "Força de atrito", "Força elétrica"],
+    correct: 2,
+    explain: "O atrito transforma energia mecânica em calor e seu trabalho depende da trajetória — por isso é dissipativa, não conservativa."
+  },
+  {
+    q: "Em um sistema conservativo, o trabalho realizado por uma força ao longo de uma trajetória fechada é:",
+    options: ["Sempre positivo", "Sempre negativo", "Igual a zero", "Igual à energia cinética final"],
+    correct: 2,
+    explain: "É justamente essa a definição de força conservativa: trabalho nulo em qualquer trajetória fechada."
+  }
+];
+
+let current = 0;
+let score = 0;
+let answered = false;
+
+const quizCard = document.getElementById('quizCard');
+
+function renderQuestion(){
+  if(current >= quizData.length){
+    renderResult();
+    return;
+  }
+  answered = false;
+  const item = quizData[current];
+  quizCard.innerHTML = `
+    <div class="quiz-progress">
+      <span>Questão ${current+1} de ${quizData.length}</span>
+      <span class="score-tag">Pontos: ${score}</span>
+    </div>
+    <div class="q-text">${item.q}</div>
+    <ul class="opt-list">
+      ${item.options.map((opt,i) => `<li><button class="opt-btn" data-i="${i}">${opt}</button></li>`).join('')}
+    </ul>
+    <div class="feedback" id="fb"></div>
+    <div class="quiz-actions">
+      <button class="btn" id="nextBtn" style="display:none;">Próxima</button>
+    </div>
+  `;
+
+  const buttons = quizCard.querySelectorAll('.opt-btn');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if(answered) return;
+      answered = true;
+      const chosen = parseInt(btn.dataset.i);
+      const fb = document.getElementById('fb');
+      buttons.forEach(b => b.disabled = true);
+
+      if(chosen === item.correct){
+        btn.classList.add('correct');
+        score++;
+        fb.className = 'feedback show ok';
+        fb.innerHTML = `<b>Certinho!</b> ${item.explain}`;
+      } else {
+        btn.classList.add('wrong');
+        buttons[item.correct].classList.add('correct');
+        fb.className = 'feedback show no';
+        fb.innerHTML = `<b>Quase.</b> ${item.explain}`;
+      }
+      document.getElementById('nextBtn').style.display = 'inline-block';
+    });
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    current++;
+    renderQuestion();
+  });
+}
+
+function renderResult(){
+  const pct = Math.round((score/quizData.length)*100);
+  quizCard.innerHTML = `
+    <div class="quiz-result">
+      <div class="big-score">${score}/${quizData.length}</div>
+      <p>${pct}% de acerto</p>
+      <p>${pct >= 75 ? 'Mandou muito bem — os conceitos estão firmes!' : pct >= 50 ? 'Bom começo, revise os pontos que errou nos flashcards e no resumo.' : 'Volte na seção de sistemas conservativos e não conservativos antes de tentar de novo.'}</p>
+      <button class="btn secondary" id="restartBtn">Refazer quiz</button>
+    </div>
+  `;
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    current = 0; score = 0;
+    renderQuestion();
+  });
+}
+
+renderQuestion();
+</script>
+
+</body>
+</html>
